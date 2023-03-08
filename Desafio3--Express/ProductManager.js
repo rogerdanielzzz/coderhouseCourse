@@ -39,7 +39,6 @@ class ProductManager {
     }
 
     getProducts = async () => {
-        console.log("entro sucios")
         if (fs.existsSync(this.path)) {
             try {
                 const data = await fs.promises.readFile(this.path, "utf-8")

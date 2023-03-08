@@ -1,1 +1,93 @@
-[{"id":1,"title":"Fresa","description":"Fruta","price":"100","thumbnail":"url.com","code":"ccc111","stock":"2"},{"id":3,"title":"Pomelo","description":"Fruta","price":"100","thumbnail":"url.com","code":"bbb222","stock":"2"},{"id":4,"title":"Pera","description":"Fruta","price":"100","thumbnail":"url.com","code":"aaa111","stock":"2"}]
+[
+    {
+        "id": 1,
+        "title": "Fresa",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "ccc111",
+        "stock": "2"
+    },
+   
+    {
+        "id": 2,
+        "title": "Pera",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "aaa111",
+        "stock": "2"
+    },
+    {
+        "id": 3,
+        "title": "cambur",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "c33c111",
+        "stock": "4"
+    },
+    {
+        "id": 4,
+        "title": "naranja",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "aa888a111",
+        "stock": "5"
+    },
+    {
+        "id": 5,
+        "title": "higo",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "bbb222222",
+        "stock": "6"
+    },
+    {
+        "id": 6,
+        "title": "papa",
+        "description": "verdura",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "bbb999222",
+        "stock": "6"
+    },
+    {
+        "id": 7,
+        "title": "limon",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "bbb200022",
+        "stock": "6"
+    },
+    {
+        "id": 8,
+        "title": "banana",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "bbbkjk222",
+        "stock": "6"
+    },
+    {
+        "id": 9,
+        "title": "tomate",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "79852",
+        "stock": "6"
+    },
+    {
+        "id": 10,
+        "title": "Pomelo",
+        "description": "Fruta",
+        "price": "100",
+        "thumbnail": "url.com",
+        "code": "bbb222",
+        "stock": "2"
+    }
+]

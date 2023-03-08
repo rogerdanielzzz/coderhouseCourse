@@ -20,6 +20,7 @@ server.get("/products", async (req, res) => {
     }
 })
 
+
 // Endpoint para traer el producto solicitado by id en el params
 server.get("/products/:pid", async (req, res) => {
     const { pid } = req.params
