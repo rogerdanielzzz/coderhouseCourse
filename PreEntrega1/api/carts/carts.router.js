@@ -41,9 +41,16 @@ router.post("/:cid/product/:pid", async (req, res) => {
         try {
             let cartFinder = await db.getCartById(parseInt(cid))
 
-            if (!Array.isArray(cartFinder)) res.status(500).json({ errr: "Cart Id doesnt exist" })
+            if (!Array.isArray(cartFinder)) {
+                res.status(500).json({ errr: "Cart Id doesnt exist" })
+                return
+            }
             let productFinder = await productIdFinder(parseInt(pid))
-            if (productFinder.Error) res.status(500).json({ errr: "Cant find a product with that id" })
+            if (productFinder.Error) {
+                res.status(500).json({ errr: "Cant find a product with that id" })
+                return
+
+            }
 
             let product = {
                 product: productFinder.id,
