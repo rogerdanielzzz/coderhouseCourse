@@ -1,0 +1,19 @@
+<h2>Agregar Producto</h2>
+<form id="formulario">
+    <label for="title">Nombre</label>
+    <input type="text" class="form-control" id="title" placeholder="Ingrese nombre producto">
+    <label for="description">Descripcion</label>
+    <input type="text" class="form-control" id="description" placeholder="Ingrese descripcion producto">
+    <label for="price">Precio</label>
+    <input type="number" class="form-control" id="price" placeholder="Ingrese Precio producto">
+    <label for="code">Codigo SKU</label>
+    <input type="text" class="form-control" id="code" placeholder="Ingrese codigo producto">
+    <label for="stock">Stock</label>
+    <input type="number" class="form-control" id="stock" placeholder="Ingrese Stock producto">
+    <input type="text" class="form-control" id="category" placeholder="Ingrese Categoria producto">
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+</form>
+<div id="products-container" class="d-flex"></div>
+<script src='/socket.io/socket.io.js'></script>
+<script src="/js/index.js"></script>
