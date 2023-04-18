@@ -1,9 +1,7 @@
 import { Router } from 'express';
 //import ProductManager from "../../../ProductManager.js"
-import ProductManagerFS from '../../Dao/ProductManagerFS.js';
 import ProductManagerDB from '../../Dao/ProductManagerDB.js';
 
-const db = new ProductManagerFS("productos.json")
 export const dbM = new ProductManagerDB()
 
 // Importar todos los routers;
@@ -12,12 +10,14 @@ export const router = Router();
 router.get("/", async (req, res) => {
 
     try {
-        const { limit } = req.query
-        let arrProduct = await dbM.getProducts()
-        if (limit) arrProduct = arrProduct.slice(0, limit)
-        res.status(200).json({ result: arrProduct })
+        const { limit, page, sort } = req.query
+        let arrProduct = await dbM.getProducts(limit, page, sort)
+        res.status(200).json({
+            status: "success",
+            ...arrProduct
+        })
     } catch (e) {
-        res.status(500).json({ errr: e })
+        res.status(500).json({ status: "error", error: e.message })
     }
 })
 
@@ -28,40 +28,42 @@ router.get("/:pid", async (req, res) => {
     if (pid) {
         try {
 
-            let arrProduct = await dbM.getProductById(pid)
-            res.status(200).json({ result: arrProduct })
+            let payload = await dbM.getProductById(pid)
+            res.status(200).json({ status: "success", payload, })
         } catch (e) {
-            res.status(500).json({ error: e })
+            res.status(500).json({ status: "error", error: e.message })
         }
-    } else res.status(400).json({ error: "Debe enviar un id de producto por params" })
+    } else res.status(400).json({ status: "error", error: "Debe enviar un id de producto por params" })
 
 })
 
 router.post("/", async (req, res) => {
     const { title, description, code, price,
         status, stock, category, thumbnails } = req.body
-
-    if (title !== undefined && description !== undefined && code !== undefined && price !== undefined &&  stock !== undefined && category !== undefined) {
+    if (title !== undefined && description !== undefined && code !== undefined && price !== undefined && stock !== undefined && category !== undefined) {
         try {
-            let titleValidated = title.toString()
-            let descriptionValidated = description.toString()
-            let codeValidated = code.toString()
-            let priceValidated = parseFloat(price)
-            let statusValidated = Boolean(status?status:true)
-            let stockValidated = parseInt(stock)
-            let categoryValidated = category.toString()
-            let thumbnailsValidated = thumbnails
+            let obj = {}
+
+            obj.title = title.toString()
+            obj.description = description.toString()
+            obj.code = code.toString()
+            obj.price = parseFloat(price)
+            obj.status = Boolean(status ? status : true)
+            obj.stock = parseInt(stock)
+            obj.category = category.toString()
+            obj.thumbnails = thumbnails ? thumbnails : []
             if (thumbnails && Array.isArray(thumbnails)) {
                 for (let i = 0; i < thumbnails.length; i++) {
-                    thumbnailsValidated[i] = thumbnails[i].toString();
+                    obj.thumbnails[i] = thumbnails[i].toString();
 
                 }
             }
 
-            let arrProduct = await dbM.addProduct({titleValidated, descriptionValidated, codeValidated, priceValidated, statusValidated, stockValidated, categoryValidated, thumbnailsValidated})
+            let arrProduct = await dbM.addProduct(obj)
+            console.log(arrProduct)
             res.status(200).json({ result: arrProduct })
         } catch (e) {
-            res.status(500).json({ error: e })
+            res.status(500).json({ error: e.message })
         }
     } else res.status(400).json({ error: "Faltan campos obligatorios" })
 
@@ -94,10 +96,10 @@ router.put("/:pid", async (req, res) => {
             }
 
 
-            let arrProduct = await db.updateProduct(pid, objeChanges)
+            let arrProduct = await dbM.updateProduct(pid, objeChanges)
             res.status(200).json({ result: arrProduct })
         } catch (e) {
-            res.status(500).json({ error: e })
+            res.status(500).json({ error: e.message })
         }
     } else res.status(400).json({ error: "Debe enviar un id de producto por params y los campos a modificar por body" })
 
@@ -106,23 +108,21 @@ router.put("/:pid", async (req, res) => {
 router.delete("/:pid", async (req, res) => {
     const { pid } = req.params
 
-
     if (pid) {
         try {
-            let arrProduct = await db.deleteProduct(parseInt(pid))
-            res.status(200).json({ result: arrProduct })
+            await dbM.deleteProduct(pid)
+            res.status(200).json({ result: "Product Deleted" })
         } catch (e) {
-            res.status(500).json({ error: e })
+            console.log(e)
+            res.status(500).json({ error: e.message })
         }
     } else res.status(400).json({ error: "Debe enviar un id de producto por params" })
 
 })
 
-export const productIdFinder= db.getProductById
-export const productIdFinderDBM= dbM.getProductById
+export const productIdFinderDBM = dbM.getProductById
 
 
-export const dbInstance= db
 
 
 
