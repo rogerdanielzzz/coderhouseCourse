@@ -11,7 +11,12 @@ router.get("/", async (req, res) => {
 
     try {
         const { limit, page, sort } = req.query
-        let arrProduct = await dbM.getProducts(limit, page, sort)
+        let filterQuery={...req.query}
+        if(limit) delete filterQuery.limit
+        if(page) delete filterQuery.page
+        if(sort) delete filterQuery.sort
+        console.log(filterQuery)
+        let arrProduct = await dbM.getProducts(limit, page, sort, filterQuery)
         res.status(200).json({
             status: "success",
             ...arrProduct

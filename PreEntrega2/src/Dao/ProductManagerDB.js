@@ -2,13 +2,13 @@ import { ProductsModel } from "../db/models/Products.model.js"
 
 export default class ProductManager {
 
-    getProducts = async (limit, page, sort) => {
+    getProducts = async (limit, page, sort, filterQuery) => {
         try {
             let options = { limit: 10, page: 1 }
             if (limit) options.limit = limit
             if (page) options.page = page
             if (sort) options.sort = { price: sort }
-            const data = await ProductsModel.paginate({}, options)
+            const data = await ProductsModel.paginate(filterQuery, options)
 
             let obj = {
                 payload: data.docs,

@@ -1,12 +1,11 @@
 {{#if productos.length }}
-<div class="d-flex">
+<div class="justify-content-center row">
     {{#each productos}}
-    <div class="card m-2" style="width: 18rem;">
+    <div class="card m-2 col-4">
         <img src="https://res.cloudinary.com/hdsqazxtw/image/upload/v1642799651/WWW/Group_1.jpg" class="card-img-top"
             alt="coderhouse">
         <div class="card-body">
             <h5 class="card-title">{{title}}</h5>
-            <p>Id producto: {{_id}}</p>
             <p class="card-text">Description: {{description}}</p>
             <p>Precio: ${{price}}</p>
             <p>imagenes url:</p>
@@ -17,8 +16,7 @@
             {{/each}}
             <p>Codigo: {{code}}</p>
             <p>Stock: {{stock}}</p>
-            <p>Activo: {{status}}</p>
-            <a href= 'http://localhost:8080/products/{{_id}}'><button class="btn btn-warning mb-4">Ver Detalles</button></a>
+            <a href= 'http://localhost:8080/products/{{_id}}'><button class="btn btn-warning ">Ver Detalles</button></a>
 
             <button class="btn btn-success" data-id={{_id}}>Agregar al carrito</button>
 
@@ -27,10 +25,10 @@
     {{/each}}
 </div>
 {{#if hasPrevPage}}
-            <a href={{prevLink}}><button class="btn btn-warning mb-4" }>anterior pagina</button></a>
+            <a href={{prevLink}}><button class="btn btn-warning mb-4" }>Pagina anterior</button></a>
 {{/if}}
 {{#if hasNextPage}}
-            <a href={{nextLink}}><button class="btn btn-warning mb-4" }>Proxima pagina</button></a>
+            <a href={{nextLink}}><button class="btn btn-warning mb-4" }>Proxima siguiente</button></a>
 {{/if}}
 {{else}}
 
