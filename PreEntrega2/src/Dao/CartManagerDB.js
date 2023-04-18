@@ -67,21 +67,28 @@ export default class CartManagerDB {
         let cart = await this.getCartById(cid)
         let pro = await ProductsModel.findById(pid)
         if (!pro || !cart) return " No keys matches with cart id"
+        
+        if (cart.products.some(el => el.item._id.toString() == pid)) {
+            await this.updatePidQty(cid, pid)
 
-        cart.products.push({
-            item: pro._id
-        })
+        } else {
+
+            cart.products.push({
+                item: pro._id
+            })
 
 
-        try {
-            await cart.save()
-            return cart
-        } catch (error) {
-            console.log(error)
-            return error
+            try {
+                await cart.save()
+                return cart
+            } catch (error) {
+                console.log(error)
+                return error
+            }
+
         }
-
     }
+
 
     updateCartByArr = async (cid, arr) => {
         try {
@@ -121,7 +128,7 @@ export default class CartManagerDB {
     }
 
     updatePidQty = async (cid, pid) => {
-  
+
         try {
             const cart = await CartModel.findById(cid);
             const productIndex = cart.products.findIndex(

@@ -27,7 +27,7 @@ deleteButton.forEach((btn) => {
         const idProduct = e.target.getAttribute('data-id')
         console.log(idProduct)
         try {
-            await axios.post("http://localhost:8080/api/carts/643de179d3047cd7ef6856bd/product/"+idProduct)
+            await axios.post("http://localhost:8080/api/carts/643de776b2189188a9bcdaf3/product/"+idProduct)
             alert("Producto agregado")
         } catch (error) {
             alert(error.message)

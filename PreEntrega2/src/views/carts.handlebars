@@ -2,22 +2,14 @@
 <div class="d-flex">
     {{#each productos}}
     <div class="card m-2" style="width: 18rem;">
-        <img src="https://res.cloudinary.com/hdsqazxtw/image/upload/v1642799651/WWW/Group_1.jpg" class="card-img-top"
-            alt="coderhouse">
         <div class="card-body">
-            <h5 class="card-title">{{title}}</h5>
-            <p>Id producto: {{_id}}</p>
-            <p class="card-text">Description: {{description}}</p>
-            <p>Precio: ${{price}}</p>
-            <p>imagenes url:</p>
-            {{#each thumbnails}}
-            <ul>
-                <li>{{this}}</li>
-            </ul>
-            {{/each}}
-            <p>Codigo: {{code}}</p>
-            <p>Stock: {{stock}}</p>
-            <p>Activo: {{status}}</p>
+            <h5 class="card-title">{{item.title}}</h5>
+            <p class="card-text">Description: {{item.description}}</p>
+            <p>Precio: ${{item.price}}</p>
+           
+            <p>Codigo: {{item.code}}</p>
+            <p>Stock: {{item.stock}}</p>
+            <p>En el carrito: {{qty}}</p>
         </div>
     </div>
     {{/each}}
