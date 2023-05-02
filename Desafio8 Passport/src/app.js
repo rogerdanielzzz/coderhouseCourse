@@ -5,14 +5,17 @@ import { router as ProductRouter,dbM } from "./routes/api/product.router.js"
 import { router as CartRouter} from "./routes/api/cart.router.js"
 import { router as viewsRouter } from "./routes/views.router.js"
 import { router as sessionRouter } from "./routes/api/sessions.router.js"
+import dotenv from "dotenv";
+dotenv.config();
+
 
 //import MessageManager from "./Dao/MessagesManager.js";
 import "./db/db.config.js"
-
+import "./passport/passportStrategies.js"
 import session  from "express-session";
 import cookieParser from "cookie-parser";
 import  FileStore  from "session-file-store";
-
+import passport from "passport";
 
 const app = express()
 app.use(express.json())
@@ -27,7 +30,8 @@ app.use(session({
     
 }))
 
-
+app.use(passport.initialize())
+app.use(passport.session())
 //Api Routes
 app.use('/api/products', ProductRouter);
 app.use('/api/carts', CartRouter);

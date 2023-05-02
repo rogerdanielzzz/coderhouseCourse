@@ -7,8 +7,7 @@ export const router = Router();
 
 
 router.get("/products", async (req, res) => {
-    if(!req.session.email) return res.redirect("/login")
-
+    if(!req?.user?.email) return res.redirect("/login")
     try {
         const { limit, page, sort } = req.query
         let on = await dbInstance.getProducts(limit, page, sort)
@@ -20,8 +19,8 @@ router.get("/products", async (req, res) => {
             nextLink: productos.nextLink ? `http://localhost:8080/products?page=${productos.page + 1}&limit=${limit ? limit : 10}` : null,
             prevLink: productos.prevLink ? `http://localhost:8080/products?page=${productos.page - 1}&limit=${limit ? limit : 10}` : null,
             productos: productos.payload,
-            name: req.session.name,
-            role: req.session.adminRole? "admin": "usuario"
+            name: req.user.first_name,
+            role: req.user.adminRole? "admin": "usuario"
 
         })
     } catch (e) {
@@ -30,7 +29,7 @@ router.get("/products", async (req, res) => {
 })
 
 router.get("/products/:pid", async (req, res) => {
-    if(!req.session.email) return res.redirect("/login")
+    if(!req?.user?.email) return res.redirect("/login")
 
     try {
         const { pid } = req.params
@@ -46,7 +45,7 @@ router.get("/products/:pid", async (req, res) => {
 })
 
 router.get("/carts/:cid", async (req, res) => {
-    if(!req.session.email) return res.redirect("/login")
+    if(!req?.user?.email) return res.redirect("/login")
 
     try {
         const { cid } = req.params
@@ -62,7 +61,7 @@ router.get("/carts/:cid", async (req, res) => {
 
 router.get("/login", async (req, res) => {
 
-    if(req.session.email) return res.redirect("/products")
+    if(req?.user?.email) return res.redirect("/products")
     try {
 
         res.render("login")
@@ -72,7 +71,7 @@ router.get("/login", async (req, res) => {
 })
 
 router.get("/registro", async (req, res) => {
-    if(req.session.email) return res.redirect("/products")
+    if(req?.user?.email) return res.redirect("/products")
 
     try {
 
