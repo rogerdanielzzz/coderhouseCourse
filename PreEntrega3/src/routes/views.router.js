@@ -1,17 +1,17 @@
 import { Router } from 'express';
 import { dbM as dbProduct } from '../controller/product.controller.js';
 import { dbM as dbCart } from "../controller/cart.controller.js";
-import {adminValidator, userValidator}from "../middlewares/auth.middleware.js"
+import { adminValidator, userValidator } from "../middlewares/auth.middleware.js"
 
 
 // Importar todos los routers;
 export const router = Router();
 
 
-router.get("/products", userValidator,async (req, res) => {
-    
-    if(!req?.user?.email) return res.redirect("/login")
-    
+router.get("/products", userValidator, async (req, res) => {
+
+    if (!req?.user?.email) return res.redirect("/login")
+
 
 
     try {
@@ -25,7 +25,7 @@ router.get("/products", userValidator,async (req, res) => {
             prevLink: productos.prevLink ? `http://localhost:8080/products?page=${productos.page - 1}&limit=${limit ? limit : 10}` : null,
             productos: productos.payload,
             name: req.user.first_name,
-            role: req.user.role? req.user.role:"user"
+            role: req.user.role ? req.user.role : "user"
 
         })
     } catch (e) {
@@ -34,8 +34,8 @@ router.get("/products", userValidator,async (req, res) => {
 })
 
 router.get("/products/:pid", async (req, res) => {
-    if(!req?.user?.email) return res.redirect("/login")
- 
+    if (!req?.user?.email) return res.redirect("/login")
+
     try {
         const { pid } = req.params
         let on = await dbProduct.getProductById(pid)
@@ -49,7 +49,7 @@ router.get("/products/:pid", async (req, res) => {
 })
 
 router.get("/carts/:cid", async (req, res) => {
-    if(!req?.user?.email) return res.redirect("/login")
+    if (!req?.user?.email) return res.redirect("/login")
 
     try {
         const { cid } = req.params
@@ -65,7 +65,7 @@ router.get("/carts/:cid", async (req, res) => {
 
 router.get("/login", async (req, res) => {
 
-    if(req?.user?.email) return res.redirect("/products")
+    if (req?.user?.email) return res.redirect("/products")
     try {
 
         res.render("login")
@@ -75,7 +75,7 @@ router.get("/login", async (req, res) => {
 })
 
 router.get("/registro", async (req, res) => {
-    if(req?.user?.email) return res.redirect("/products")
+    if (req?.user?.email) return res.redirect("/products")
 
     try {
 
@@ -84,7 +84,17 @@ router.get("/registro", async (req, res) => {
         res.send(500).json({ error: e.message })
     }
 })
+router.get("/chat", async (req, res) => {
 
+    if (!req?.user?.email) return res.redirect("/login")
+
+    try {
+
+        res.render("chat")
+    } catch (e) {
+        res.send(500).json({ error: e.message })
+    }
+})
 
 
 
