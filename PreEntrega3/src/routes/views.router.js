@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { dbM as dbProduct } from '../controller/product.controller.js';
 import { dbM as dbCart } from "../controller/cart.controller.js";
+import {adminValidator, userValidator}from "../middlewares/auth.middleware.js"
+
 
 // Importar todos los routers;
 export const router = Router();
 
 
-router.get("/products", async (req, res) => {
+router.get("/products", userValidator,async (req, res) => {
     
     if(!req?.user?.email) return res.redirect("/login")
     

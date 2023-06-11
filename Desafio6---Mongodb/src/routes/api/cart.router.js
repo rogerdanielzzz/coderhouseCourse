@@ -15,7 +15,8 @@ router.post("/", async (req, res) => {
         
         res.status(200).json({ result: cart })
     } catch (e) {
-        res.status(500).json({ err: e })
+        console.log(e)
+        res.status(500).json({ error: e.message })
     }
 })
 
@@ -28,7 +29,9 @@ router.get("/:cid", async (req, res) => {
             let arrProduct = await dbM.getCartById(cid)
             res.status(200).json({ result: arrProduct })
         } catch (e) {
-            res.status(500).json({ errr: e })
+            console.log(e)
+
+            res.status(500).json({ error: e.message })
         }
     } else res.status(400).json({ err: "Cid is empty" })
 })
@@ -46,9 +49,9 @@ router.post("/:cid/product/:pid", async (req, res) => {
             res.status(200).json({ result: result })
         } catch (e) {
             console.log(e)
-            res.status(500).json({ errr: e })
+            res.status(500).json({ error: e.message })
         }
-    } else res.status(400).json({ err: "Cid and Pid must be provided" })
+    } else res.status(400).json({ error: "Cid and Pid must be provided" })
 
 })
 

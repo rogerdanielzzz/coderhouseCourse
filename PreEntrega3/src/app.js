@@ -1,33 +1,36 @@
 import express from "express";
+import env from "./config/config.js";
 import { __dirnaname } from "./utils.js"
 import handlebars from "express-handlebars";
-import { router as ProductRouter} from "./routes/api/product.router.js"
-import { router as CartRouter} from "./routes/api/cart.router.js"
+import { router as ProductRouter } from "./routes/api/product.router.js"
+import { router as CartRouter } from "./routes/api/cart.router.js"
 import { router as viewsRouter } from "./routes/views.router.js"
 import { router as sessionRouter } from "./routes/api/sessions.router.js"
+import { Server } from "socket.io"
 import dotenv from "dotenv";
 dotenv.config();
+import MessageManager from "./DAL/Dao/MessagesManager.js";
 
-
-//import MessageManager from "./Dao/MessagesManager.js";
-import "./db/db.config.js"
+import "./DAL/db/db.config.js"
 import "./passport/passportStrategies.js"
-import session  from "express-session";
+import session from "express-session";
 import cookieParser from "cookie-parser";
-import  FileStore  from "session-file-store";
+import FileStore from "session-file-store";
 import passport from "passport";
 
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(__dirnaname + "/public"))
-const fileStore= FileStore(session)
+const fileStore = FileStore(session)
+const msgInstance = new MessageManager()
+
 app.use(session({
     store: new fileStore({
-        path: __dirnaname+"/sessions"
+        path: __dirnaname + "/sessions"
     }),
-    secret:"default",
-    
+    secret: "default",
+
 }))
 
 app.use(passport.initialize())
@@ -50,13 +53,43 @@ app.get('/', (req, res) => {
     res.redirect('/login')
 })
 
-const PORT = 8080
+const PORT = env.PORT
 
 const httpServer = app.listen(PORT, () => {
     console.log("Andando en puerto " + PORT)
 })
 
 
-httpServer
+const socketServer = new Server(httpServer)
+let p = 0
+
+
+socketServer.on('connection', async (socket) => {
+    p += 1
+    console.log(`${p} connected`)
+
+    const msgs = await msgInstance.getMsgs()
+
+    socket.emit('messages', msgs)
+
+    socket.on('newMsg', async obj => {
+        console.log("Entro a agregar");
+        try {
+
+            await msgInstance.newMsg(obj)
+            const updateMsg = await msgInstance.getMsgs()
+            socketServer.emit('messages', updateMsg)
+        } catch (error) {
+            return
+        }
+    })
+
+    socket.on('disconnect', (msg) => {
+        p -= 1
+        console.log(`${p} connected`)
+        console.log(msg);
+    })
+
+})
 
 

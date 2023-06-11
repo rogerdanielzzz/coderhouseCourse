@@ -3,9 +3,12 @@ import bcrypt from "bcrypt"
 import { Strategy as GitHubStrategy } from "passport-github2";
 
 import { Strategy as LocalStrategy } from "passport-local";
-import { UserModel } from "../db/models/User.model.js"
+import { UserModel } from "../DAL/db/models/User.model.js"
 import { dbM } from "../controller/sessions.controller.js";
 import env from "../config/config.js"
+
+import { emailSender } from "../mailer/mailer.js"
+import { confirmEmailTemplate } from "../mailer/templates/confirmRegister.js"
 
 
 
@@ -48,22 +51,24 @@ passport.use('signup', new LocalStrategy(
             last_name,
             age,
         } = req.body
-        if (first_name !== undefined && last_name !== undefined && email !== undefined && age !== undefined && password !== undefined) {
 
-            try {
-                let obj = {}
-                obj.first_name = first_name.toString()
-                obj.last_name = last_name.toString()
-                obj.email = email.toString().toLowerCase()
-                obj.age = parseFloat(age)
-                obj.password = bcrypt.hashSync(password, encryptRounds);
-                let newUser = await dbM.createUser(obj)
-                if (!newUser.success) done({ error: "no se pudo crear" }, false)
-                done(null, newUser.success)
-            } catch (e) {
-                done({ error: e.message }, false)
-            }
-        } else done({ error: "Faltan campos obligatorios" }, false)
+        if ([first_name, last_name, email, age, password].includes(undefined)) return done({ error: "Faltan campos obligatorios" }, false)
+
+        try {
+            let obj = {}
+            obj.first_name = first_name.toString()
+            obj.last_name = last_name.toString()
+            obj.email = email.toString().toLowerCase()
+            obj.age = parseFloat(age)
+            obj.password = bcrypt.hashSync(password, encryptRounds);
+            let newUser = await dbM.createUser(obj)
+            if (!newUser.success) return done({ error: "no se pudo crear" }, false)
+            await emailSender(newUser.success.email, "prueba", confirmEmailTemplate(newUser.success.first_name))
+            return done(null, newUser.success)
+        } catch (e) {
+            return done({ error: e.message }, false)
+        }
+
 
     }
 ))
@@ -80,7 +85,7 @@ passport.use("github", new GitHubStrategy({
             let email = (profile.emails?.length > 0 ? profile.emails[0].value : profile._json.email)?.toString().toLowerCase()
 
             let finded = await dbM.findeUserByEmail(email)
-            if (finded.success) done(null, finded.success)
+            if (finded.success) return done(null, finded.success)
 
 
             let user = await UserModel.create({
@@ -91,13 +96,13 @@ passport.use("github", new GitHubStrategy({
                 age: 0,
             })
 
-            if (user) done(null, user)
+            if (user) return done(null, user)
             else {
-                done(null, false)
+                return done(null, false)
             }
 
         } catch (e) {
-            done(e, false)
+            return done(e, false)
         }
     }))
 passport.serializeUser((user, done) => {

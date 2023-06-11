@@ -1,4 +1,4 @@
-import UserManager from '../Dao/UserManager.js';
+import UserManager from '../DAL/Dao/UserManager.js';
 
 export const dbM = new UserManager()
 
@@ -16,6 +16,7 @@ export const logoutController= async  (req, res) => {
 
         })
     } catch (error) {
+        console.log(error)
         res.status(400).json({ success: false, error: error.message })
 
     }
