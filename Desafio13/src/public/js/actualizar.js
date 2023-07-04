@@ -3,6 +3,8 @@ const password = document.getElementById('password')
 const verification = document.getElementById('verification')
 
 const form = document.getElementById('formulario')
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get('token');
 
 
 
@@ -11,24 +13,39 @@ const form = document.getElementById('formulario')
 const resetForm = () => {
 
     password.value = '',
-    verification.value = ''
+        verification.value = ''
 
 
 
 }
 
 
+
 form.onsubmit = async (e) => {
     e.preventDefault()
+    if (!token) {
+        alert("no exite token")
+        return
+    }
+    if (password.value !== verification.value) {
+        alert("La contraseña no coincide")
+        return
+    }
     const user = {
-        email: email.value,
+        password: password.value,
+        token,
     }
     try {
-        await axios.post("http://localhost:8080/api/sessions/recuperar", user)
-        alert("Se Ha enviado un correo al mail especificaco")
+        await axios.put("http://localhost:8080/api/sessions/blanquear", user)
+        alert("Se Ha actualizado la contraseña")
     } catch (error) {
         console.log(error)
-        alert(error.response.data.error)
+        if (error?.response?.data?.error) alert(error.response.data.error)
+        else alert("ha ocurrido un error")
+
+        if (error?.response?.data?.expired) window.location.replace('http://localhost:8080/recuperar')
+
+
     }
     resetForm()
 }

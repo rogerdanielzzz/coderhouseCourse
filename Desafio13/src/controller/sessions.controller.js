@@ -55,18 +55,21 @@ export const passwordUpdaterController = async (req, res) => {
         jwt.verify(token, env.encryptKey, async (err, decoded) => {
 
             if (err) {
-                return res.status(400).json({ success: false, error: "El link ha expirado, o es invalido" });
+                return res.status(400).json({ expired: true, success: false, error: "El link ha expirado, o es invalido" });
             } else {
-                const passwordEncrypt = bcrypt.hashSync(password, Number.parseInt(env.encryptRounds));
-                await dbM.passwordChanger(decoded._id, passwordEncrypt)
+                try {
+                    await dbM.passwordChanger(decoded._id, password)
 
-                return res.status(201).json({ success: true, msg: "La contraseña ha sido actualizada", });
+                    return res.status(201).json({ success: true, msg: "La contraseña ha sido actualizada", });
+                } catch (error) {
+                    return res.status(500).json({ success: false, error: error.message })
+                }
+
             }
         })
 
 
     } catch (error) {
-        console.log(error)
         return res.status(500).json({ success: false, error: error.message })
 
     }

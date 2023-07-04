@@ -95,6 +95,16 @@ router.get("/recuperar", async (req, res) => {
         res.send(500).json({ error: e.message })
     }
 })
+router.get("/blanquear", async (req, res) => {
+    if (req?.user?.email) return res.redirect("/products")
+
+    try {
+
+        res.render("actualizar")
+    } catch (e) {
+        res.send(500).json({ error: e.message })
+    }
+})
 
 router.get("/chat", async (req, res) => {
 

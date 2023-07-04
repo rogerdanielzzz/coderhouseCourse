@@ -13,7 +13,7 @@ import { confirmEmailTemplate } from "../mailer/templates/confirmRegister.js"
 
 
 const { clientID, clientSecret, callbackURL } = env
-let encryptRounds = 1
+
 
 
 passport.use("login", new LocalStrategy({
@@ -60,7 +60,7 @@ passport.use('signup', new LocalStrategy(
             obj.last_name = last_name.toString()
             obj.email = email.toString().toLowerCase()
             obj.age = parseFloat(age)
-            obj.password = bcrypt.hashSync(password, encryptRounds);
+            obj.password = bcrypt.hashSync(password, env.encryptRounds);
             let newUser = await dbM.createUser(obj)
             if (!newUser.success) return done({ error: "no se pudo crear" }, false)
             await emailSender(newUser.success.email, "prueba", confirmEmailTemplate(newUser.success.first_name))

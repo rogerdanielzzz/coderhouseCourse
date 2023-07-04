@@ -13,7 +13,7 @@ router.delete('/logout', logoutController)
 
 router.post("/registro", passport.authenticate("signup"), signUpController)
 router.post("/recuperar", passwordRecoveryController)
-router.post("/blanquear", passwordUpdaterController)
+router.put("/blanquear", passwordUpdaterController)
 
 
 

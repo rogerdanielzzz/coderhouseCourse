@@ -14,6 +14,7 @@ const env = {
     userEmail: process.env.userEmail,
     encryptExpiration: process.env.encryptExpiration,
     encryptKey: process.env.encryptKey,
+    encryptRounds: parseInt(process.env.encryptRounds) || 1
 }
 
 export default env
