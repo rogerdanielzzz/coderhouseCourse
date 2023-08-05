@@ -1,0 +1,334 @@
+paths:
+  /api/carts:
+    post:
+      tags:
+        - Carts
+      summary: Crear un nuevo carrito
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el carrito creado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+    get:
+      tags:
+        - Carts
+      summary: Obtener un carrito por su ID
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el carrito solicitado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: array
+                    items:
+                      type: string
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          example:
+            status: "error"
+            error: "Cid is empty"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+    put:
+      tags:
+        - Carts
+      summary: Actualizar un carrito por su ID
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito (string)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                products:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el carrito actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: object
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          example:
+            status: "error"
+            error: "Cid and Array must be provided"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Carts
+      summary: Eliminar un carrito por su ID
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el carrito eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+          example:
+            result: "Cart Deleted"
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          example:
+            status: "error"
+            error: "Cid is empty"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /api/carts/{cid}/product/{pid}:
+    post:
+      tags:
+        - Carts
+      summary: Agregar un producto al carrito
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito (string)
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el resultado de la operación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          example:
+            status: "error"
+            error: "Cid and Pid must be provided"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+    delete:
+      tags:
+        - Carts
+      summary: Eliminar un producto del carrito
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito (string)
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el resultado de la operación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+          example:
+            result: "Product Deleted"
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          example:
+            status: "error"
+            error: "Cid and Pid must be provided"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+    put:
+      tags:
+        - Carts
+      summary: Incrementar la cantidad de un producto en el carrito
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito (string)
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          description: ID del producto (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el resultado de la operación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: object
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          example:
+            status: "error"
+            error: "Cid and Pid must be provided"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+  /api/carts/{cid}/purchase:
+    post:
+      tags:
+        - Carts
+      summary: Realizar la compra de un carrito
+      parameters:
+        - name: cid
+          in: path
+          description: ID del carrito (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el resultado de la operación de compra
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  payload:
+                    type: object
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          example:
+            status: "error"
+            error: "Cid must be provided"
+        "500":
+          $ref: "#/components/responses/ServerError"
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        error:
+          type: string
+
+  responses:
+    ServerError:
+      description: Error interno del servidor
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: "error"
+              error:
+                type: string
+                example: "Error interno del servidor. Por favor, inténtelo de nuevo más tarde."

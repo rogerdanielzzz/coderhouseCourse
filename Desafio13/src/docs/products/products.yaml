@@ -1,0 +1,332 @@
+---
+paths:
+  /api/products:
+    get:
+      tags:
+        - Products
+      summary: Obtener todos los productos
+      parameters:
+        - name: limit
+          in: query
+          description: Limita la cantidad de productos en la respuesta
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            example: 10
+        - name: page
+          in: query
+          description: Número de página para paginación
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            example: 1
+        - name: sort
+          in: query
+          description: Ordenar productos por precio (ejemplo 1 o -1 para orden inverso)
+          required: false
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Éxito, devuelve una matriz de productos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+              example:
+                - id: 611b6b1535a55d0015cdd6c7
+                  title: Producto 1
+                  description: Descripción del producto 1
+                  price: 25.99
+                  status: true
+                  stock: 100
+                  category: Electrónicos
+                  thumbnails:
+                    - https://ejemplo.com/thumbnail1.jpg
+                    - https://ejemplo.com/thumbnail2.jpg
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Error interno del servidor. Por favor, inténtelo de nuevo más tarde.
+    post:
+      tags:
+        - Products
+      summary: Crear un nuevo producto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+            example:
+              title: Nuevo Producto
+              description: Descripción del nuevo producto
+              price: 29.99
+              status: true
+              stock: 50
+              category: Electrónicos
+              thumbnails:
+                - https://ejemplo.com/nuevo-thumbnail.jpg
+      responses:
+        "200":
+          description: Éxito, devuelve el resultado de la creación
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+              example:
+                id: 611b6b1535a55d0015cdd6c9
+                title: Nuevo Producto
+                description: Descripción del nuevo producto
+                price: 29.99
+                status: true
+                stock: 50
+                category: Electrónicos
+                thumbnails:
+                  - https://ejemplo.com/nuevo-thumbnail.jpg
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Error interno del servidor. Por favor, inténtelo de nuevo más tarde.
+  "/api/products/{pid}":
+    get:
+      tags:
+        - Products
+      summary: Obtener un producto por su ID
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve los detalles del producto
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+              example:
+                id: 611b6b1535a55d0015cdd6c7
+                title: Producto 1
+                description: Descripción del producto 1
+                price: 25.99
+                status: true
+                stock: 100
+                category: Electrónicos
+                thumbnails:
+                  - https://ejemplo.com/thumbnail1.jpg
+                  - https://ejemplo.com/thumbnail2.jpg
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Debe enviar un id de producto por params
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Error interno del servidor. Por favor, inténtelo de nuevo más tarde.
+    put:
+      tags:
+        - Products
+      summary: Actualizar un producto por su ID
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto (string)
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+            example:
+              title: Producto Actualizado
+              description: Nueva descripción del producto
+              price: 30.99
+              status: true
+              stock: 90
+              category: Electrónicos
+              thumbnails:
+                - https://ejemplo.com/actual-thumbnail.jpg
+      responses:
+        "200":
+          description: Éxito, devuelve el resultado de la actualización
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+              example:
+                id: 611b6b1535a55d0015cdd6c7
+                title: Producto Actualizado
+                description: Nueva descripción del producto
+                price: 30.99
+                status: true
+                stock: 90
+                category: Electrónicos
+                thumbnails:
+                  - https://ejemplo.com/actual-thumbnail.jpg
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Debe enviar un id de producto por params y los campos a modificar por
+                      body
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Error interno del servidor. Por favor, inténtelo de nuevo más tarde.
+    delete:
+      tags:
+        - Products
+      summary: Eliminar un producto por su ID
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto (string)
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Éxito, devuelve el resultado de la eliminación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+              example:
+                result: Product Deleted
+        "400":
+          description: Solicitud inválida
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Debe enviar un id de producto por params
+        "500":
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  error:
+                    type: string
+                    example: Error interno del servidor. Por favor, inténtelo de nuevo más tarde.
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string
+    ProductInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string

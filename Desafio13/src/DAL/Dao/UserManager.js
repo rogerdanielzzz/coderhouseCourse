@@ -2,7 +2,6 @@ import { UserModel as User } from "../db/models/User.model.js"
 import bcrypt from 'bcrypt'
 import env from "../../config/config.js"
 
-console.log(env)
 export default class UserManager {
     createUser = async (userPar) => {
 

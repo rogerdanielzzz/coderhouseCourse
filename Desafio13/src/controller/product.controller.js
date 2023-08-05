@@ -5,7 +5,7 @@ export const dbM = new ProductManagerDB()
 // Importar todos los routers;
 
 export const getProducts = async (req, res) => {
-
+    
     try {
         const { limit, page, sort } = req.query
         let filterQuery = { ...req.query }

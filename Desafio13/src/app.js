@@ -7,9 +7,11 @@ import { router as CartRouter } from "./routes/api/cart.router.js"
 import { router as viewsRouter } from "./routes/views.router.js"
 import { router as sessionRouter } from "./routes/api/sessions.router.js"
 import { Server } from "socket.io"
-import dotenv from "dotenv";
-dotenv.config();
 import MessageManager from "./DAL/Dao/MessagesManager.js";
+import dotenv from "dotenv";
+import swaggerUi from "swagger-ui-express";
+import {swaggerSetup} from "./swaggerSpecs.js"
+dotenv.config();
 
 import "./DAL/db/db.config.js"
 import "./passport/passportStrategies.js"
@@ -39,6 +41,7 @@ app.use(passport.session())
 app.use('/api/products', ProductRouter);
 app.use('/api/carts', CartRouter);
 app.use('/api/sessions', sessionRouter);
+app.use(`/api/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 
 
 
