@@ -19,6 +19,10 @@ describe("Test Endpoint Product ", function () {
         const response = await request.get(`/products`)
         expect(response._body).to.have.property("status")
         expect(response._body).to.have.property("payload")
+        expect(response._body.status).to.be.equal("success")
+        expect(response._body.payload).to.be.an("Array")
+
+
 
     })
 
@@ -28,6 +32,8 @@ describe("Test Endpoint Product ", function () {
         const responseOne = await request.get(`/products/${response._body.payload[0]._id}`)
         expect(responseOne._body).to.have.property("status")
         expect(responseOne._body).to.have.property("payload")
+        expect(response._body.status).to.be.equal("success")
+        expect(response._body.payload).to.be.an("Array")
 
     })
 
