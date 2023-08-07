@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import moment from 'moment-timezone'
+moment.tz.setDefault('America/Argentina/Buenos_Aires');
+
+
 
 const UserSchema = new mongoose.Schema({
 
@@ -28,6 +32,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "user"
     },
+    last_connection:{
+        type: Date,
+        default: () => moment().toDate(),
+    }
 
 })
 
