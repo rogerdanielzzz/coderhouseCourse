@@ -12,6 +12,7 @@ import { confirmEmailTemplate } from "../mailer/templates/confirmRegister.js"
 
 
 
+
 const { clientID, clientSecret, callbackURL } = env
 
 
@@ -26,8 +27,11 @@ passport.use("login", new LocalStrategy({
             let finded = await dbM.findeUserByEmail(email?.toString().toLowerCase())
 
             if (!finded.success) done(null, false)
-            let user = JSON.parse(JSON.stringify(finded.success))
-            if (bcrypt.compareSync(password, user.password)) {
+            let preUser = JSON.parse(JSON.stringify(finded.success))
+            if (bcrypt.compareSync(password, preUser.password)) {
+
+                let userLc = await dbM.lastConectionUpdater(finded.success._id)
+                let user = JSON.parse(JSON.stringify(userLc))
 
                 return done(null, user)
 
@@ -85,7 +89,11 @@ passport.use("github", new GitHubStrategy({
             let email = (profile.emails?.length > 0 ? profile.emails[0].value : profile._json.email)?.toString().toLowerCase()
 
             let finded = await dbM.findeUserByEmail(email)
-            if (finded.success) return done(null, finded.success)
+            if (finded.success) {
+                let userLc = await dbM.lastConectionUpdater(finded.success._id)
+
+                return done(null, userLc)
+            }
 
 
             let user = await UserModel.create({

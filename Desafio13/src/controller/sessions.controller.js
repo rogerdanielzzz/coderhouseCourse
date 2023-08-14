@@ -13,6 +13,8 @@ export const loginController = async (req, res) => {
 export const logoutController = async (req, res) => {
 
     try {
+
+        await dbM.lastConectionUpdater(req.user._id)
         req.session.destroy(() => {
             req.logout((err) => console.log(err))
             res.status(200).json({ success: true, msg: "Session finalizada" })
