@@ -18,6 +18,5 @@ const env = {
     callbackURL: `${process.env.API_URL || "http://localhost:8080/"}${process.env.callbackURL}`,
 
 }
-console.log(env.callbackURL)
 
 export default env
