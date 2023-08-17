@@ -5,6 +5,7 @@ const last_name = document.getElementById('last_name')
 const email = document.getElementById('email')
 const age = document.getElementById('age')
 const password = document.getElementById('password')
+import env from "../../config/config"
 
 
 
@@ -30,7 +31,7 @@ form.onsubmit = async(e) => {
     }
     console.log(user)
     try {
-        await axios.post("http://localhost:8080/api/sessions/registro", user)
+        await axios.post(`${env.API_URL}api/sessions/registro`, user)
         alert("Registrado")
     } catch (error) {
         console.log(error)

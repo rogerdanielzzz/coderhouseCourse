@@ -1,6 +1,7 @@
 
 const email = document.getElementById('email')
 const form = document.getElementById('formulario')
+import env from "../../config/config"
 
 
 
@@ -20,7 +21,7 @@ form.onsubmit = async (e) => {
         email: email.value,
     }
     try {
-        await axios.post("http://localhost:8080/api/sessions/recuperar", user)
+        await axios.post(`${env.API_URL}api/sessions/recuperar`, user)
         alert("Se Ha enviado un correo al mail especificaco")
     } catch (error) {
         console.log(error)

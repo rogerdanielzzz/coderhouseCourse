@@ -1,4 +1,5 @@
 import { ProductsModel } from "../db/models/Products.model.js"
+import env from "../../config/config.js"
 
 export default class ProductManager {
 
@@ -18,8 +19,8 @@ export default class ProductManager {
             page: data.page,
             hasPrevPage: data.hasPrevPage,
             hasNextPage: data.hasNextPage,
-            prevLink: data.prevPage ? `localhost:8080/api/products?limit=${options.limit}&page=${data.prevPage}` : null,
-            nextLink: data.nextPage ? `localhost:8080/api/products?limit=${options.limit}&page=${data.nextPage}` : null,
+            prevLink: data.prevPage ? `${env.API_URL}api/products?limit=${options.limit}&page=${data.prevPage}` : null,
+            nextLink: data.nextPage ? `${env.API_URL}api/products?limit=${options.limit}&page=${data.nextPage}` : null,
         }
         return obj
 

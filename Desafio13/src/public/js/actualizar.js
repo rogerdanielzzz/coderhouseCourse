@@ -5,6 +5,7 @@ const verification = document.getElementById('verification')
 const form = document.getElementById('formulario')
 const urlParams = new URLSearchParams(window.location.search);
 const token = urlParams.get('token');
+import env from "../../config/config";
 
 
 
@@ -36,14 +37,14 @@ form.onsubmit = async (e) => {
         token,
     }
     try {
-        await axios.put("http://localhost:8080/api/sessions/blanquear", user)
+        await axios.put(`${env.API_URL}api/sessions/blanquear`, user)
         alert("Se Ha actualizado la contraseña")
     } catch (error) {
         console.log(error)
         if (error?.response?.data?.error) alert(error.response.data.error)
         else alert("ha ocurrido un error")
 
-        if (error?.response?.data?.expired) window.location.replace('http://localhost:8080/recuperar')
+        if (error?.response?.data?.expired) window.location.replace(`${env.API_URL}recuperar`)
 
 
     }

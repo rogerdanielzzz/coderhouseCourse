@@ -1,3 +1,4 @@
+import env from "../../config/config.js"
 export const passwordRecovery = (name, token) => {
     
 
@@ -35,7 +36,7 @@ export const passwordRecovery = (name, token) => {
                     ">
                                         Hola ${name} Esto es una prueba
                                     </h1>
-                                    <a class="nav-link" href="http://localhost:8080/blanquear?token=${token}">Recuperar Contraseña</a>
+                                    <a class="nav-link" href="${env.API_URL}blanquear?token=${token}">Recuperar Contraseña</a>
 
                                 </td>
                             </tr>

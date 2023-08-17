@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { dbM as dbProduct } from '../controller/product.controller.js';
 import { dbM as dbCart } from "../controller/cart.controller.js";
 import { adminValidator, userValidator } from "../middlewares/auth.middleware.js"
+import env from '../config/config.js';
 
 
 // Importar todos los routers;
@@ -21,8 +22,8 @@ router.get("/products", userValidator, async (req, res) => {
         res.render("products", {
             hasNextPage: productos.hasNextPage,
             hasPrevPage: productos.hasPrevPage,
-            nextLink: productos.nextLink ? `http://localhost:8080/products?page=${productos.page + 1}&limit=${limit ? limit : 10}` : null,
-            prevLink: productos.prevLink ? `http://localhost:8080/products?page=${productos.page - 1}&limit=${limit ? limit : 10}` : null,
+            nextLink: productos.nextLink ? `${env.API_URL}products?page=${productos.page + 1}&limit=${limit ? limit : 10}` : null,
+            prevLink: productos.prevLink ? `${env.API_URL}products?page=${productos.page - 1}&limit=${limit ? limit : 10}` : null,
             productos: productos.payload,
             name: req.user.first_name,
             role: req.user.role ? req.user.role : "user"

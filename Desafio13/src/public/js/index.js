@@ -8,13 +8,14 @@ const code = document.getElementById('code')
 const stock = document.getElementById('stock')
 const category = document.getElementById('category')
 const logout = document.getElementById('logout')
+import env from "../../config/config.js"
 
-logout.addEventListener('click',async (e) => {
+logout.addEventListener('click', async (e) => {
     try {
-       const {data}= await axios.delete("http://localhost:8080/api/sessions/logout/")
-       console.log(data)
+        const { data } = await axios.delete(`${env.API_URL}api/sessions/logout/`)
+        console.log(data)
         alert(data.msg)
-        window.location.replace('http://localhost:8080/login')
+        window.location.replace(`${env.API_URL}login`)
 
     } catch (error) {
         alert(error.message)
@@ -35,11 +36,11 @@ const resetForm = () => {
 let deleteButton = document.querySelectorAll('.btn-success')
 console.log(deleteButton)
 deleteButton.forEach((btn) => {
-    btn.addEventListener('click',async (e) => {
+    btn.addEventListener('click', async (e) => {
         const idProduct = e.target.getAttribute('data-id')
         console.log(idProduct)
         try {
-            await axios.post("http://localhost:8080/api/carts/643de776b2189188a9bcdaf3/product/"+idProduct)
+            await axios.post(`${env.API_URL}api/carts/643de776b2189188a9bcdaf3/product/${idProduct}`)
             alert("Producto agregado")
         } catch (error) {
             alert(error.message)
