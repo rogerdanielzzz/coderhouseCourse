@@ -15,8 +15,9 @@ const env = {
     encryptKey: process.env.encryptKey,
     encryptRounds: parseInt(process.env.encryptRounds) || 1,
     API_URL: process.env.API_URL || "http://localhost:8080/",
-    callbackURL: `${process.env.API_URL || "http://localhost:8080/"} + ${process.env.callbackURL}`,
+    callbackURL: `${process.env.API_URL || "http://localhost:8080/"}${process.env.callbackURL}`,
 
 }
+console.log(env.callbackURL)
 
 export default env
